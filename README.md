@@ -40,21 +40,20 @@ claude-opus-4-6
 claude-sonnet-4-6
 ```
 
-## 配置
+## 配置与本地启动
 
-复制示例环境变量文件：
+准备配置：
 
 ```bash
 cp .env.example .env
+mkdir -p data
 ```
 
-然后编辑 `.env`，至少配置：
+编辑 `.env`，至少填入：
 
 ```bash
 CCTEST_API_KEY=cct-YOUR_KEY
 ```
-
-后端会自动尝试读取 `.env`。如果 `.env` 不存在，不会报错。
 
 配置优先级：
 
@@ -62,7 +61,7 @@ CCTEST_API_KEY=cct-YOUR_KEY
 .env > 命令行参数 > 系统环境变量
 ```
 
-常用配置：
+常用变量：
 
 ```text
 CCTEST_API_KEY        CCTest 平台 API Key
@@ -72,6 +71,28 @@ DATABASE_PATH         SQLite 路径，默认 ./data/cctest-plus.sqlite
 POLL_INTERVAL_SECONDS 后端轮询间隔，默认 3
 TASK_TIMEOUT_MINUTES  单任务最长等待时间，默认 30
 DEV_CORS_ORIGIN       开发环境前端地址，默认 http://localhost:5173
+```
+
+启动后端：
+
+```bash
+cd backend
+go test ./...
+go run ./cmd/server
+```
+
+启动前端：
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+访问：
+
+```text
+http://localhost:5173
 ```
 
 ## Docker 启动
@@ -121,40 +142,6 @@ docker compose logs -f
 ```bash
 docker compose down
 ```
-
-## 源码启动
-
-准备配置：
-
-```bash
-cp .env.example .env
-# 编辑 .env，填入 CCTEST_API_KEY
-mkdir -p data
-```
-
-启动后端：
-
-```bash
-cd backend
-go test ./...
-go run ./cmd/server
-```
-
-另开一个终端启动前端：
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-开发环境访问：
-
-```text
-http://localhost:5173
-```
-
-前端开发服务器会把 `/api` 请求代理到本地后端。
 
 ## GitHub 镜像打包
 
