@@ -1,0 +1,10 @@
+.env
+data/*.sqlite
+data/*.sqlite-*
+backend/bin/
+backend/tmp/
+backend/.cache/
+frontend/dist/
+frontend/node_modules/
+frontend/tsconfig.tsbuildinfo
+.DS_Store

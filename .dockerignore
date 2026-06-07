@@ -1,0 +1,9 @@
+.git
+.cache
+backend/.cache
+backend/bin
+backend/tmp
+data
+frontend/dist
+frontend/node_modules
+node_modules
