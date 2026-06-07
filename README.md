@@ -1,12 +1,12 @@
 # cctest-plus
 
-cctest-plus 是一个 CCTest 检测任务 GUI，用来在本地批量创建、轮询和查看 CCTest 模型检测结果。
+cctest-plus 是一个 CCTest 批量检测任务 GUI, 没有魔法和科技, 需要您购买检测次数才能用!
 
 这个项目没有登录、认证和权限控制。它适合在本机或可信内网使用，不建议直接暴露到公网。目标 API Key 会写入本地 SQLite 数据库，页面展示时会脱敏。
 
 本项目由 AI 根据需求生成，使用前建议自行审查代码、配置和运行环境。
 
-使用本项目必须购买 cctest 检测次数包, 拿到对应API Key 才可以使用 [cctest传送门](https://cctest.ai)
+使用本项目必须购买 [cctest](https://cctest.ai) 检测次数包, 拿到对应API Key 才可以使用 [cctest传送门](https://cctest.ai)
 
 ## 界面预览
 
