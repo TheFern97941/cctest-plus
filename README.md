@@ -126,14 +126,27 @@ docker stop cctest-plus
 docker rm cctest-plus
 ```
 
-也可以在源码目录使用 Docker Compose：
+也可以新建 `docker-compose.yml`：
+
+```yaml
+services:
+  cctest-plus:
+    image: ghcr.io/thefern97941/cctest-plus:latest
+    container_name: cctest-plus
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      CCTEST_API_KEY: cct-YOUR_KEY
+    volumes:
+      - ./data:/app/data
+```
+
+启动：
 
 ```bash
 mkdir -p data
-cp .env.example .env
-# 编辑 .env，填入 CCTEST_API_KEY
-
-docker compose up --build -d
+docker compose up -d
 docker compose logs -f
 ```
 
@@ -195,3 +208,7 @@ POST /api/tasks/:id/rerun
 - 数据库：SQLite
 - 前端：React + Tailwind CSS
 - 图表与可视化：SVG / CSS
+
+## 协议
+
+本项目使用 [Unlicense](LICENSE)，完全免费、自由使用、自由修改、自由分发。
