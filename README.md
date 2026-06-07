@@ -103,6 +103,8 @@ http://localhost:5173
 
 使用 GitHub Container Registry 镜像：
 
+镜像支持 `linux/amd64` 和 `linux/arm64` 两种常见架构。
+
 ```bash
 mkdir -p cctestPlus
 
