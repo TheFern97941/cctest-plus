@@ -1,5 +1,9 @@
 # cctest-plus
 
+<p align="center">
+  <img src="docs/images/logo.png" alt="cctest-plus logo" width="520" />
+</p>
+
 ![GitHub Repo stars](https://img.shields.io/github/stars/TheFern97941/cctest-plus?style=social)
 
 cctest-plus 是一个 CCTest 批量检测任务 GUI, 没有魔法和科技, 需要您购买检测次数才能用!

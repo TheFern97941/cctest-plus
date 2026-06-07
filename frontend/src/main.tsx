@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { ChevronLeft, ChevronRight, Loader2, Plus, RefreshCw, RotateCcw, Shield } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2, Plus, RefreshCw, RotateCcw } from 'lucide-react';
 import { TaskDetail } from './TaskDetail';
 import { buildResultSummary, cacheUsageRate, clamp, formatPercent, formatScore, formatTime, parseRaw, verdictClass, verdictLabel } from './resultUtils';
 import { StatusPill } from './StatusPill';
@@ -235,8 +235,8 @@ function App() {
           <header className="rounded-lg border border-white/10 bg-white/5 p-4 backdrop-blur-xl">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <div className="mb-1.5 flex items-center gap-2 text-sm text-blue-300/90">
-                  <Shield className="h-4 w-4" />
+                <div className="mb-1.5 flex items-center gap-2 text-sm font-medium text-blue-100">
+                  <img src="/logo-mark.png" alt="" className="h-6 w-6 rounded-md" />
                   CCTest Plus
                 </div>
                 <h1 className="text-xl font-semibold tracking-normal text-white">Claude Code API 检测任务</h1>
