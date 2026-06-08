@@ -141,12 +141,33 @@ func (r *Router) mountStatic(engine *gin.Engine) {
 
 	engine.Static("/assets", filepath.Join(r.cfg.FrontendDist, "assets"))
 	engine.NoRoute(func(ctx *gin.Context) {
-		if strings.HasPrefix(ctx.Request.URL.Path, "/api/") {
+		requestPath := ctx.Request.URL.Path
+		if strings.HasPrefix(requestPath, "/api/") {
 			ctx.JSON(http.StatusNotFound, gin.H{"error": "not found"})
 			return
 		}
+
+		if staticPath, ok := r.frontendRootFile(requestPath); ok {
+			ctx.File(staticPath)
+			return
+		}
+
 		ctx.File(indexPath)
 	})
+}
+
+func (r *Router) frontendRootFile(requestPath string) (string, bool) {
+	cleanPath := filepath.Clean("/" + strings.TrimPrefix(requestPath, "/"))
+	if cleanPath == "/" || strings.Contains(strings.TrimPrefix(cleanPath, "/"), "/") {
+		return "", false
+	}
+
+	staticPath := filepath.Join(r.cfg.FrontendDist, strings.TrimPrefix(cleanPath, "/"))
+	info, err := os.Stat(staticPath)
+	if err != nil || info.IsDir() {
+		return "", false
+	}
+	return staticPath, true
 }
 
 func parsePositiveInt(raw string, fallback int) int {
