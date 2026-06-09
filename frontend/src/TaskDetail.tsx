@@ -53,34 +53,49 @@ export function TaskDetail({ task }: { task: Task | null }) {
       ? '成本倍率偏高'
       : '';
   const scoreFullCount = summary.scoreRows.filter((row) => row.value >= row.max).length;
+  const hasTaskError = Boolean(task.error_message?.trim());
 
   return (
     <aside className="flex flex-col rounded-lg border border-white/10 bg-white/5 backdrop-blur-xl">
       <div className="shrink-0 border-b border-white/10 p-3">
-        <div className="flex min-w-0 flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0">
-            <div className="mb-1.5 flex flex-wrap items-center gap-2 text-xs text-white/45">
+        <div className="flex min-w-0 flex-col gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-white/45">
               <Activity className="h-4 w-4 text-blue-300" />
-              <span>任务 #{task.id}</span>
               <span className="rounded-md border border-blue-400/20 bg-blue-500/10 px-1.5 py-0.5 text-blue-200">{task.model}</span>
               <span>{formatTime(task.created_at)}</span>
             </div>
-            <h2 className="truncate text-lg font-semibold text-white">{task.remark}</h2>
-            <p className="mt-1 truncate text-sm text-white/45" title={task.url}>{task.url}</p>
+            <div className="flex shrink-0 flex-wrap items-center gap-2">
+              <StatusPill status={task.status} />
+              <div className={`rounded-md border px-2.5 py-1 text-xs ${verdictClass(summary.verdict)}`}>{verdictLabel(summary.verdict)}</div>
+              <CheckBadge
+                state={summary.checkTokenUsage ? (hasUsage ? 'pass' : 'warning') : 'unknown'}
+                value={summary.checkTokenUsage ? (hasUsage ? `缓存 ${formatPercent(cacheRate)}` : '审计等待') : '未审计'}
+              />
+            </div>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <StatusPill status={task.status} />
-            <div className={`rounded-md border px-2.5 py-1 text-xs ${verdictClass(summary.verdict)}`}>{verdictLabel(summary.verdict)}</div>
-            <CheckBadge
-              state={summary.checkTokenUsage ? (hasUsage ? 'pass' : 'warning') : 'unknown'}
-              value={summary.checkTokenUsage ? (hasUsage ? `缓存 ${formatPercent(cacheRate)}` : '审计等待') : '未审计'}
-            />
+
+          <div className="grid min-w-0 gap-2 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.35fr)_max-content_max-content] md:items-center">
+            <h2 className="min-w-0 truncate text-lg font-semibold text-white" title={task.remark}>{task.remark}</h2>
+            <p className="min-w-0 truncate text-sm text-white/45" title={task.url}>{task.url}</p>
+            <span
+              className={`min-w-0 whitespace-nowrap rounded-md border px-2 py-1 font-mono text-xs ${task.cctest_task_id ? 'border-blue-500/25 bg-blue-500/10 text-blue-200' : 'border-white/10 bg-black/20 text-white/45'}`}
+              title={task.cctest_task_id ?? undefined}
+            >
+              任务ID {task.cctest_task_id ? compact(task.cctest_task_id) : '-'}
+            </span>
+            <span className="justify-self-start rounded-md border border-white/10 bg-black/20 px-2.5 py-1 font-mono text-xs text-white/45 md:justify-self-end">
+              #{task.id}
+            </span>
           </div>
         </div>
       </div>
 
       <div className="grid gap-3 p-3">
         <section className="rounded-lg border border-white/10 bg-black/20 p-3">
+          {hasTaskError && (
+            <TaskErrorBlock errorMessage={task.error_message ?? ''} />
+          )}
           <div className="grid gap-3 2xl:grid-cols-[minmax(360px,420px)_minmax(0,1fr)]">
             <ScoreHero
               checks={checks}
@@ -117,9 +132,7 @@ export function TaskDetail({ task }: { task: Task | null }) {
 
               <MetricGroup title="异常与追踪">
                 {anomalyText && <Metric label="成本异常" value={anomalyText} tone="high" />}
-                {task.error_message && <Metric label="任务错误" value={task.error_message} tone="bad" />}
                 {summary.tokenAuditError && <Metric label="审计错误" value={summary.tokenAuditError} tone="bad" />}
-                <Metric label="任务 ID" value={task.cctest_task_id ? compact(task.cctest_task_id) : '-'} tone={task.cctest_task_id ? 'info' : 'neutral'} />
               </MetricGroup>
             </div>
           </div>
@@ -156,6 +169,15 @@ export function TaskDetail({ task }: { task: Task | null }) {
         </section>
       </div>
     </aside>
+  );
+}
+
+function TaskErrorBlock({ errorMessage }: { errorMessage: string }) {
+  return (
+    <div className="mb-3 rounded-lg border border-red-500/25 bg-red-500/10 p-3 text-red-100">
+      <div className="mb-2 text-xs font-medium text-red-200/70">任务错误信息</div>
+      <div className="whitespace-pre-wrap break-words text-sm leading-relaxed">{errorMessage}</div>
+    </div>
   );
 }
 
